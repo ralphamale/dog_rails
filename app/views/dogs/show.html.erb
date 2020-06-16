@@ -7,7 +7,17 @@
 
   <p><%= @dog.description %></p>
 
+
+  Only show these if youre supposed to
+
   <%= link_to "Edit #{@dog.name}'s Profile", edit_dog_path %>
+
+  <%= link_to "Delete #{@dog.name}'s Profile", dog_path, method: :delete %>
   <br>
   <%= link_to "Delete #{@dog.name}'s Profile", dog_path, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <br>
+  <% unless current_user == @dog.owner %>
+    <%= button_to 'Like', dog_likes_path(@dog), method: :post %>
+    Or maybe you have already liked it.
+  <% end %>
 </section>

@@ -10,18 +10,34 @@ describe 'Dog resource', type: :feature do
     expect(Dog.count).to eq(1)
   end
 
-  it 'can edit a dog profile' do
-    dog = create(:dog)
-    visit edit_dog_path(dog)
-    fill_in 'Name', with: 'Speck'
-    click_button 'Update Dog'
-    expect(dog.reload.name).to eq('Speck')
+  with 'authorized user' do
+
+    it 'can edit a dog profile' do
+      dog = create(:dog)
+      visit edit_dog_path(dog)
+      fill_in 'Name', with: 'Speck'
+      click_button 'Update Dog'
+      expect(dog.reload.name).to eq('Speck')
+    end
+
+    it 'can delete a dog profile' do
+      dog = create(:dog)
+      visit dog_path(dog)
+      click_link "Delete #{dog.name}'s Profile"
+      expect(Dog.count).to eq(0)
+    end
+
   end
 
-  it 'can delete a dog profile' do
-    dog = create(:dog)
-    visit dog_path(dog)
-    click_link "Delete #{dog.name}'s Profile"
-    expect(Dog.count).to eq(0)
+
+  with 'unauthorized user (not dog owner)' do
+    it 'cannot edit dog profile' do
+
+    end
+
+    it 'cannot delete a dog profile' do
+
   end
+
+
 end
