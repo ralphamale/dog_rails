@@ -1,0 +1,8 @@
+<p>
+	Sort by:
+	<% if params[:sort] == 'trending' %>
+		<%= link_to "Oldest", dogs_url %>
+	<% else %>
+	  <%= link_to "Trending", dogs_url(sort: 'trending') %>
+	<% end %>
+</p>

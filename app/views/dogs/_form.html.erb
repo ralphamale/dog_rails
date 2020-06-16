@@ -1,11 +1,17 @@
 <%= simple_form_for @dog do |f| %>
   <%= f.input :name %>
   <%= f.input :description, as: :text %>
-  <%= f.input :image, as: :file %>
-
-  <% if @dog.images.any? %>
-    <%= image_tag @dog.images.first %>
+  <%= f.fields_for :images do |i| %>
+  	<%= i.input :image, as: :file, input_html: { multiple: true } %>
   <% end %>
 
+
+  <% if @dog.images.any? %>
+  	<% @dog.images.each do |img_url| %>
+  		<%= image_tag img_url %>
+  	<% end %>
+  <% end %>
+
+  <br />
   <%= f.button :submit %>
 <% end %>

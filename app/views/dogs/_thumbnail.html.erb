@@ -1,6 +1,16 @@
+
+<% if dog_counter.even? %>
+	<%= render partial: 'ad' %>
+<% end %>
+
 <a href="<%= url_for(dog) %>">
   <article>
     <h2 class="dog-name"><%= dog.name %></h2>
-    <%= image_tag url_for(dog.images.first), class: "dog-photo", alt: "Photo of #{dog.name}" %>
+    <% if dog.images.any? %>
+    	<%= image_tag url_for(dog.images.first), class: "dog-photo", alt: "Photo of #{dog.name}" %>
+    <% end %>
+
+    <p>Likes in last hour:<%= dog.likes_in_last_hour %></p>
   </article>
 </a>
+

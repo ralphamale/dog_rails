@@ -17,3 +17,32 @@ Run the specs with `rspec`
 Run the server with `rails s`
 
 View the site at http://localhost:3000
+
+--
+
+todo
+Add pagination to index page, to display 5 dogs per page
+
+Add the ability to for a user to input multiple dog images on an edit form or new dog form
+
+Allow sorting the index page by the number of likes in the last hour
+	-need to have zero likes dogs underneath.
+
+testing
+
+SOME DONE:
+
+
+
+Add pagination to index page, to display 5 dogs per page
+
+DONE: 
+
+ad.jpg
+
+Associate dogs with owners - Check.
+
+Allow editing only by the owner - Check
+
+
+Allow users to like other dogs (not their own)
