@@ -1,11 +1,23 @@
 class DogsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_dog, only: [:show, :edit, :update, :destroy]
-  before_action :authorize, only: [:edit, :destroy]
+  before_action :check_ownership, only: [:edit, :destroy, :update]
 
   # GET /dogs
   # GET /dogs.json
   def index
-    @dogs = Dog.page(1)
+    @dogs = if params[:sort] == 'trending'
+        Dog.
+          left_outer_joins(:likes).
+          where('likes.created_at >= ? OR likes.id IS NULL', 1.hour.ago).
+          group('dogs.id').
+          order("count(likes.id) desc")
+    else
+      Dog
+    end
+    @dogs = @dogs.page(params[:page])
+
+
   end
 
   # GET /dogs/1
@@ -26,11 +38,15 @@ class DogsController < ApplicationController
   # POST /dogs
   # POST /dogs.json
   def create
-    @dog = Dog.new(dog_params, owner: current_user)
-    # @dog.owner = current_user
+    @dog = Dog.new(dog_params)
+    @dog.owner = current_user
     respond_to do |format|
       if @dog.save
-        @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
+        if params[:dog][:images].present?
+          params[:dog][:images].each do |image|
+            @dog.images.attach(image.last) if image.present?
+          end
+        end
 
         format.html { redirect_to @dog, notice: 'Dog was successfully created.' }
         format.json { render :show, status: :created, location: @dog }
@@ -46,7 +62,11 @@ class DogsController < ApplicationController
   def update
     respond_to do |format|
       if @dog.update(dog_params)
-        @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
+        if params[:dog][:images].present?
+          params[:dog][:images].each do |image|
+            @dog.images.attach(image.last) if image.present?
+          end
+        end
 
         format.html { redirect_to @dog, notice: 'Dog was successfully updated.' }
         format.json { render :show, status: :ok, location: @dog }
@@ -75,12 +95,12 @@ class DogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dog_params
-      params.require(:dog).permit(:name, :description, :images, :sort)
+      params.require(:dog).permit(:name, :description, :images)
     end
 
-    def authorize
+    def check_ownership
       unless Dog.find(params[:id]).owner == current_user
-        redirect_to dogs_url, alert: "Not authorized" 
+        redirect_to dogs_url, alert: "You are not the owner of this dog." 
       end
     end
 end

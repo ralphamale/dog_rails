@@ -1,5 +1,5 @@
 class Dog < ApplicationRecord
-  max_paginates_per 100 #prevent abuse.
+  paginates_per 5
 
   belongs_to :owner, 
     :class_name => 'User', 
@@ -12,6 +12,10 @@ class Dog < ApplicationRecord
     now = Time.now
     lower_bound = now - 1.hour
     likes.where(created_at: lower_bound..now).count
+  end
+
+  def owner?(user)
+    owner.present? && owner == user
   end
 
 end

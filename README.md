@@ -19,28 +19,30 @@ Run the server with `rails s`
 View the site at http://localhost:3000
 
 --
+
+todo
 Add pagination to index page, to display 5 dogs per page
 
 Add the ability to for a user to input multiple dog images on an edit form or new dog form
 
-
-
-Allow users to like other dogs (not their own)
-
 Allow sorting the index page by the number of likes in the last hour
+	-need to have zero likes dogs underneath.
 
-
+testing
 
 SOME DONE:
 
 
-Display the ad.jpg image (saved at app/assets/images/ad.jpg) after every 2 dogs in the index page, to simulate advertisements in a feed.  - Need to serve asset.
 
 Add pagination to index page, to display 5 dogs per page
 
 DONE: 
 
+ad.jpg
+
 Associate dogs with owners - Check.
 
 Allow editing only by the owner - Check
 
+
+Allow users to like other dogs (not their own)
